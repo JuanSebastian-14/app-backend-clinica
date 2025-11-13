@@ -1,5 +1,6 @@
 package flutter_backend.Espiritu.controller;
 
+import flutter_backend.Espiritu.dto.MedicoUpdateDTO;
 import flutter_backend.Espiritu.entity.Medico;
 import flutter_backend.Espiritu.repository.MedicoRepository;
 import jakarta.validation.Valid;
@@ -119,7 +120,7 @@ public class MedicoController {
     @PutMapping("/{cmp}")
     public ResponseEntity<Map<String, Object>> actualizar(
             @PathVariable String cmp,
-            @Valid @RequestBody Medico medicoActualizado,
+            @Valid @RequestBody MedicoUpdateDTO medicoActualizado,
             BindingResult bindingResult) {
         
         if (bindingResult.hasErrors()) {
@@ -131,6 +132,7 @@ public class MedicoController {
             Medico medico = medicoRepository.findById(cmp)
                 .orElseThrow(() -> new RuntimeException("Médico no encontrado con CMP: " + cmp));
             
+            // Actualizar solo los campos permitidos (no el CMP)
             medico.setMedNombre(medicoActualizado.getMedNombre());
             medico.setMedApellidos(medicoActualizado.getMedApellidos());
             medico.setEspeNombre(medicoActualizado.getEspeNombre());

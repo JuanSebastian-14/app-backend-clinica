@@ -1,5 +1,6 @@
 package flutter_backend.Espiritu.controller;
 
+import flutter_backend.Espiritu.dto.PacienteUpdateDTO;
 import flutter_backend.Espiritu.entity.Paciente;
 import flutter_backend.Espiritu.repository.PacienteRepository;
 import jakarta.validation.Valid;
@@ -100,7 +101,7 @@ public class PacienteController {
     @PutMapping("/{dni}")
     public ResponseEntity<Map<String, Object>> actualizar(
             @PathVariable String dni,
-            @Valid @RequestBody Paciente pacienteActualizado,
+            @Valid @RequestBody PacienteUpdateDTO pacienteActualizado,
             BindingResult bindingResult) {
         
         if (bindingResult.hasErrors()) {
@@ -112,6 +113,7 @@ public class PacienteController {
             Paciente paciente = pacienteRepository.findById(dni)
                 .orElseThrow(() -> new RuntimeException("Paciente no encontrado con DNI: " + dni));
             
+            // Actualizar solo los campos permitidos (no el DNI)
             paciente.setPacNombre(pacienteActualizado.getPacNombre());
             paciente.setPacApellidoPaterno(pacienteActualizado.getPacApellidoPaterno());
             paciente.setPacApellidoMaterno(pacienteActualizado.getPacApellidoMaterno());
